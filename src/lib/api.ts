@@ -1,5 +1,4 @@
-// API service - Replace these endpoints with your Firebase/Supabase URLs
-const API_BASE_URL = '/api'; // Change this to your backend URL
+import { supabase } from './supabase';
 
 export interface Entry {
   id?: string;
@@ -8,63 +7,66 @@ export interface Entry {
   due: string;
   owner: string;
   team: string;
-  createdAt?: string;
+  created_at?: string;
 }
 
-// Mock data for development (remove when connecting to real backend)
-let mockEntries: Entry[] = [
-  {
-    id: '1',
-    title: 'Group Project Milestone 1',
-    info: 'Complete the research phase and submit preliminary findings',
-    due: '2024-12-15',
-    owner: 'Alex Chen',
-    team: 'CS301-TeamA',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: '2',
-    title: 'Literature Review Draft',
-    info: 'Draft the literature review section for the thesis',
-    due: '2024-12-20',
-    owner: 'Jordan Smith',
-    team: 'Thesis-Group',
-    createdAt: new Date().toISOString()
-  }
-];
-
 export const api = {
-  // GET /entries - Fetch all entries
+  // GET /entries - Fetch all entries from Supabase
   getEntries: async (): Promise<Entry[]> => {
-    // TODO: Replace with actual API call
-    // const response = await fetch(`${API_BASE_URL}/entries`);
-    // return response.json();
-    
-    // Mock implementation
-    return new Promise((resolve) => {
-      setTimeout(() => resolve([...mockEntries]), 500);
-    });
+    try {
+      const { data, error } = await supabase
+        .from('entries')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('❌ Error fetching entries:', error);
+        
+        // Check if table doesn't exist
+        if (error.message.includes('relation') || error.message.includes('does not exist')) {
+          console.error('⚠️ The "entries" table does not exist in Supabase.');
+          console.log('📋 Please run the SQL from supabase-setup.sql in your Supabase SQL Editor');
+        }
+        
+        throw new Error(`Database Error: ${error.message}`);
+      }
+
+      console.log('✅ Fetched entries successfully:', data?.length || 0, 'entries');
+      return data || [];
+    } catch (err) {
+      console.error('❌ Failed to fetch entries:', err);
+      throw err;
+    }
   },
 
-  // POST /addEntry - Create a new entry
-  addEntry: async (entry: Omit<Entry, 'id' | 'createdAt'>): Promise<Entry> => {
-    // TODO: Replace with actual API call
-    // const response = await fetch(`${API_BASE_URL}/addEntry`, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(entry)
-    // });
-    // return response.json();
-    
-    // Mock implementation
-    return new Promise((resolve) => {
-      const newEntry: Entry = {
-        ...entry,
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString()
-      };
-      mockEntries.unshift(newEntry);
-      setTimeout(() => resolve(newEntry), 500);
-    });
+  // POST /addEntry - Create a new entry in Supabase
+  addEntry: async (entry: Omit<Entry, 'id' | 'created_at'>): Promise<Entry> => {
+    try {
+      console.log('📝 Creating entry:', entry);
+      
+      const { data, error } = await supabase
+        .from('entries')
+        .insert([entry])
+        .select()
+        .single();
+
+      if (error) {
+        console.error('❌ Error adding entry:', error);
+        
+        // Check if table doesn't exist
+        if (error.message.includes('relation') || error.message.includes('does not exist')) {
+          console.error('⚠️ The "entries" table does not exist in Supabase.');
+          console.log('📋 Please run the SQL from supabase-setup.sql in your Supabase SQL Editor');
+        }
+        
+        throw new Error(`Database Error: ${error.message}`);
+      }
+
+      console.log('✅ Entry created successfully:', data);
+      return data;
+    } catch (err) {
+      console.error('❌ Failed to add entry:', err);
+      throw err;
+    }
   }
 };

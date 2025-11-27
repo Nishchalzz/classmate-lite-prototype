@@ -15,7 +15,7 @@ const Navbar = () => {
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2 font-semibold text-primary">
           <BookOpen className="h-6 w-6" />
-          <span className="text-lg">ClassMate Lite</span>
+          <span className="text-lg">ClassMate Lite Pro</span>
         </Link>
 
         <div className="flex items-center gap-1">
