@@ -1,8 +1,12 @@
-# Welcome to your Lovable project
+# ClassMate Lite - Supabase Backend Integration
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/9e64790f-df6e-45fe-b7ce-a1c3afe83829
+
+## Backend Setup
+
+This project now uses **Supabase** as the backend database. See `SUPABASE_SETUP.md` for detailed setup instructions.
 
 ## How can I edit this code?
 
@@ -59,6 +63,8 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- **Supabase** (Backend Database)
+- @supabase/supabase-js (Database Client)
 
 ## How can I deploy this project?
 

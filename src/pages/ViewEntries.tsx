@@ -17,7 +17,14 @@ const ViewEntries = () => {
       const data = await api.getEntries();
       setEntries(data);
     } catch (err) {
-      setError('Failed to load entries. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      console.error('Failed to fetch entries:', err);
+      
+      if (errorMessage.includes('does not exist') || errorMessage.includes('relation')) {
+        setError('Database table not set up. Please check browser console (F12) and run the SQL from supabase-setup.sql file.');
+      } else {
+        setError(`Failed to load entries: ${errorMessage}`);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -41,11 +48,20 @@ const ViewEntries = () => {
   if (error) {
     return (
       <main className="container mx-auto flex min-h-[60vh] items-center justify-center px-4">
-        <div className="text-center">
-          <p className="text-destructive">{error}</p>
-          <Button onClick={fetchEntries} variant="outline" className="mt-4">
-            Try Again
-          </Button>
+        <div className="text-center max-w-md">
+          <p className="text-destructive mb-4">{error}</p>
+          <div className="flex gap-2 justify-center">
+            {error.includes('Database table not set up') && (
+              <Link to="/setup">
+                <Button variant="default">
+                  Setup Database
+                </Button>
+              </Link>
+            )}
+            <Button onClick={fetchEntries} variant="outline">
+              Try Again
+            </Button>
+          </div>
         </div>
       </main>
     );

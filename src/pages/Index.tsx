@@ -7,17 +7,17 @@ const Index = () => {
     {
       icon: Calendar,
       title: 'Track Deadlines',
-      description: 'Never miss an assignment with organized due dates',
+      description: 'Never miss an assignment with cloud-synced due dates',
     },
     {
       icon: Users,
       title: 'Team Collaboration',
-      description: 'Coordinate with your study groups effortlessly',
+      description: 'Real-time coordination with your study groups',
     },
     {
       icon: GraduationCap,
-      title: 'Stay Organized',
-      description: 'Keep all your academic tasks in one place',
+      title: 'Cloud Storage',
+      description: 'All your tasks stored securely in Supabase database',
     },
   ];
 
@@ -31,12 +31,12 @@ const Index = () => {
         
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
           Welcome to{' '}
-          <span className="text-primary">ClassMate Lite</span>
+          <span className="text-primary">ClassMate Lite Pro</span>
         </h1>
         
         <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
-          Your lightweight study planning companion for academic collaboration. 
-          Create, organize, and track study tasks with your team.
+          Your powerful study planning companion powered by Supabase backend. 
+          Create, organize, and track study tasks with real-time database sync.
         </p>
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">

@@ -65,9 +65,14 @@ const CreateEntry = () => {
 
       navigate('/entries');
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Failed to create entry:', error);
+      
       toast({
-        title: 'Error',
-        description: 'Failed to save entry. Please try again.',
+        title: 'Failed to save entry',
+        description: errorMessage.includes('does not exist') 
+          ? 'Database table not set up. Please check the console and run supabase-setup.sql'
+          : errorMessage,
         variant: 'destructive',
       });
     } finally {
